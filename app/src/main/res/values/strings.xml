@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Rabobank Assignement</string>
+    <string name="table_issue_title_fisrt_name">First Name</string>
+    <string name="table_issue_title_surname">Surname</string>
+    <string name="table_issue_title_issue_count">Issue Count</string>
+    <string name="table_issue_title_date_birth">Date Birth</string>
+</resources>
