@@ -23,27 +23,20 @@ import java.util.ArrayList;
 
 public class UpdateIssuesAsyncTask extends AsyncTask<Void, Void, Void> {
     //private Context context;
-    private AssignementActivity context;
+    private AssignementActivity appContext;
     public ArrayList<Issue> issueList;
     public IssueListAdapter issueAdapter;
 
-
-    /*public UpdateIssuesAsyncTask(Context context, ArrayList<Issue> issueList) {
+    public UpdateIssuesAsyncTask(AssignementActivity appContext, ArrayList<Issue> issueList) {
         super();
-        this.context = context;
-        this.issueList = issueList;
-    }*/
-
-    public UpdateIssuesAsyncTask(AssignementActivity context, ArrayList<Issue> issueList) {
-        super();
-        this.context = context;
+        this.appContext = appContext;
         this.issueList = issueList;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
 
-        ParserTool parserTool = new ParserTool(context.getBaseContext());
+        ParserTool parserTool = new ParserTool(appContext.getBaseContext());
         try {
             issueList = parserTool.getListIssue();
         } catch (IOException e) {
@@ -55,6 +48,6 @@ public class UpdateIssuesAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        context.updateListView(issueList);
+        appContext.updateListView(issueList);
     }
 }

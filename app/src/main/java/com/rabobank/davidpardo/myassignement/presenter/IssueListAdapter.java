@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.rabobank.davidpardo.myassignement.R;
 import com.rabobank.davidpardo.myassignement.model.Issue;
+import com.rabobank.davidpardo.myassignement.view.AssignementActivity;
 
 import java.util.ArrayList;
 
@@ -20,10 +21,10 @@ public class IssueListAdapter extends ArrayAdapter<Issue> {
     private int resource;
 
     public ArrayList<Issue> issueList;
-    public Context appContext;
+    public AssignementActivity appContext;
 
 
-    public IssueListAdapter(Context appContext, int resource, ArrayList<Issue> issueList) {
+    public IssueListAdapter(AssignementActivity appContext, int resource, ArrayList<Issue> issueList) {
         super(appContext, resource, issueList);
         this.appContext = appContext;
         this.resource = resource;
@@ -31,19 +32,7 @@ public class IssueListAdapter extends ArrayAdapter<Issue> {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) appContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        View rowView= inflater.inflate(resource, null, true);
 
-        TextView txtIssueFirstName = (TextView) rowView.findViewById(R.id.txt_FisrtName);
-        TextView txtIssueSurtName = (TextView) rowView.findViewById(R.id.txt_SurName);
-        TextView txtIssueIssueCount = (TextView) rowView.findViewById(R.id.txt_IssueCount);
-        TextView txtIssueDateBirth = (TextView) rowView.findViewById(R.id.txt_DateBirth);
-
-        txtIssueFirstName.setText(issueList.get(position).getfirstName());
-        txtIssueSurtName.setText(issueList.get(position).getSurname());
-        txtIssueIssueCount.setText(issueList.get(position).getIssueCount());
-        txtIssueDateBirth.setText(issueList.get(position).getDateOfBirth());
-
-        return rowView;
+        return appContext.UpdateCustomItemListView(position, resource, issueList);
     }
 }
