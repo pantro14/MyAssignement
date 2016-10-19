@@ -1,5 +1,6 @@
 package com.rabobank.davidpardo.myassignement.presenter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.widget.ListView;
 
 import com.rabobank.davidpardo.myassignement.R;
 import com.rabobank.davidpardo.myassignement.model.Issue;
+import com.rabobank.davidpardo.myassignement.model.ParserTool;
+import com.rabobank.davidpardo.myassignement.view.AssignementActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,51 +21,40 @@ import java.util.ArrayList;
  * Created by davidpardo on 10/18/16.
  */
 
-public class UpdateIssuesAsyncTask extends AsyncTask<ListView, Void, String> {
-    ListView listViewIssue;
-    Context context;
-    ArrayList<Issue> issueList;
+public class UpdateIssuesAsyncTask extends AsyncTask<Void, Void, Void> {
+    //private Context context;
+    private AssignementActivity context;
+    public ArrayList<Issue> issueList;
+    public IssueListAdapter issueAdapter;
 
-    public UpdateIssuesAsyncTask(Context context) {
+
+    /*public UpdateIssuesAsyncTask(Context context, ArrayList<Issue> issueList) {
         super();
         this.context = context;
+        this.issueList = issueList;
+    }*/
+
+    public UpdateIssuesAsyncTask(AssignementActivity context, ArrayList<Issue> issueList) {
+        super();
+        this.context = context;
+        this.issueList = issueList;
     }
 
     @Override
-    protected String doInBackground(ListView... listViews) {
-        listViewIssue = listViews[0];
-        issueList = getListIssue();
+    protected Void doInBackground(Void... voids) {
+
+        ParserTool parserTool = new ParserTool(context.getBaseContext());
+        try {
+            issueList = parserTool.getListIssue();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
-    protected void onPostExecute(String o) {
-        View IssueTableTitle = (View) LayoutInflater.from(context).inflate(R.layout.issue_table_title, null);
-        listViewIssue.addHeaderView(IssueTableTitle);
-        IssueListAdapter issueListAdapter = new IssueListAdapter(context, R.layout.issue_items, issueList);
-        listViewIssue.setAdapter(issueListAdapter);
-    }
-
-    private ArrayList<Issue> getListIssue() {
-        ArrayList<Issue> issueListCSV = new ArrayList<Issue>();
-        try {
-            InputStreamReader is = new InputStreamReader(context.getAssets()
-                    .open("issues.csv"));
-            BufferedReader reader = new BufferedReader(is);
-            reader.readLine();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] issueList = line.split(",");
-                Issue issue = new Issue(issueList[0].replaceAll("^\"|\"$", ""),
-                        issueList[1].replaceAll("^\"|\"$", ""),
-                        issueList[2].replaceAll("^\"|\"$", ""),
-                        issueList[3].replaceAll("^\"|\"$", ""));
-                issueListCSV.add(issue);
-            }
-            return issueListCSV;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        context.updateListView(issueList);
     }
 }
