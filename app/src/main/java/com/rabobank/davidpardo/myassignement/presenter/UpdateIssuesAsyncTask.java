@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.rabobank.davidpardo.myassignement.R;
-import com.rabobank.davidpardo.myassignement.model.Issue;
 import com.rabobank.davidpardo.myassignement.model.ParserTool;
 import com.rabobank.davidpardo.myassignement.view.AssignementActivity;
 
@@ -22,21 +21,20 @@ import java.util.ArrayList;
  */
 
 public class UpdateIssuesAsyncTask extends AsyncTask<Void, Void, Void> {
-    //private Context context;
-    private AssignementActivity appContext;
-    public ArrayList<Issue> issueList;
+    MediatorIssue mediatorIssue;
+    public ArrayList<ArrayList<String>> issueList;
     public IssueListAdapter issueAdapter;
 
-    public UpdateIssuesAsyncTask(AssignementActivity appContext, ArrayList<Issue> issueList) {
+    public UpdateIssuesAsyncTask(MediatorIssue mediatorIssue) {
         super();
-        this.appContext = appContext;
-        this.issueList = issueList;
+        this.issueList = new ArrayList<ArrayList<String>>();
+        this.mediatorIssue = mediatorIssue;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
 
-        ParserTool parserTool = new ParserTool(appContext.getBaseContext());
+        ParserTool parserTool = new ParserTool(mediatorIssue.getAppContext());
         try {
             issueList = parserTool.getListIssue();
         } catch (IOException e) {
@@ -48,6 +46,6 @@ public class UpdateIssuesAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        appContext.updateListView(issueList);
+        mediatorIssue.mediatorCallback(issueList);
     }
 }

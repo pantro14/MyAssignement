@@ -6,6 +6,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by davidpardo on 10/19/16.
@@ -19,25 +24,21 @@ public class ParserTool {
         this.context = context;
     }
 
-    public ArrayList<Issue> getListIssue() throws IOException{
-        ArrayList<Issue> issueListCSV = new ArrayList<Issue>();
+    public ArrayList<ArrayList<String>> getListIssue() throws IOException{
+        ArrayList<ArrayList<String>> issueList = new ArrayList<ArrayList<String>>();
         InputStreamReader is = new InputStreamReader(context.getAssets()
                 .open("issues.csv"));
         BufferedReader reader = new BufferedReader(is);
-        reader.readLine();
         String line;
         while ((line = reader.readLine()) != null) {
-            String[] issueList = line.split(",");
-            for (int i=0; i<issueList.length; i++){
-                issueList[i] = issueList[i].replace("\"", "");
+            String[] stringList = line.split(",");
+            for (int i=0; i<stringList.length; i++){
+                stringList[i] = stringList[i].replace("\"", "");
             }
-            Issue issue = new Issue(issueList[0],
-                    issueList[1],
-                    issueList[2],
-                    issueList[3]);
-            issueListCSV.add(issue);
+            ArrayList<String> issueFields = new ArrayList<String>(Arrays.asList(stringList));
+            issueList.add(issueFields);
         }
-        return issueListCSV;
+        return issueList;
     }
 
 
